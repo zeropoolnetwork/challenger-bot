@@ -1,0 +1,33 @@
+{
+  "name": "challenger-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "npx ts-node ./src/index.ts",
+    "start:prod": "NODE_ENV=production npx ts-node ./src/index.ts",
+    "start:debug": "npx ts-node-dev $NODE_DEBUG_OPTION --respawn --transpileOnly ./src/index.ts",
+    "build": "npm run prebuild && npx tsc",
+    "lint": "npx tslint -c tslint.json 'src/**/*.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeropoolnetwork/challenger-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zeropoolnetwork/challenger-bot/issues"
+  },
+  "homepage": "https://github.com/zeropoolnetwork/challenger-bot#readme",
+  "devDependencies": {
+    "prettier": "^1.19.1",
+    "@types/node": "^13.7.1",
+    "ts-node": "^8.6.2",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.2"
+  }
+}
