@@ -27,7 +27,7 @@
     "fs": "0.0.1-security",
     "path": "^0.12.7",
     "truffle-hdwallet-provider": "^1.0.17",
-    "zeropool-lib": "^0.4.11-node"
+    "zeropool-lib": "^0.4.12-node"
   },
   "devDependencies": {
     "@types/node": "^13.7.1",

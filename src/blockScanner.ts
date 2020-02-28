@@ -63,7 +63,6 @@ async function handleBlockEvent(event: PublishBlockEvent, storage: IStorage): Pr
         nullifiers.push(...item.tx.nullifier);
     }
 
-
 }
 
 function checkDoubleSpend(tx: Tx<string>, allNullifiers: string[]): boolean {
