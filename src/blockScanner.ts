@@ -1,11 +1,9 @@
 import zp from "./zeroPool";
-import { MemoryStorage } from "./storage/memoryStorage";
-import { PublishBlockEvent } from "zeropool-lib";
+import { PublishBlockEvent, Tx } from "zeropool-lib";
 import { verifyTx } from "./verifier";
+import { IStorage } from "./storage/IStorage";
 
-const storage = new MemoryStorage();
-
-export async function scanBlocks(): Promise<void> {
+export async function scanBlocks(storage: IStorage): Promise<void> {
 
     while (true) {
 
@@ -14,7 +12,7 @@ export async function scanBlocks(): Promise<void> {
         const blockEvents = await zp.ZeroPool.publishBlockEvents(lastBlockNumber + 1);
 
         for (const event of blockEvents) {
-            await handleBlockEvent(event);
+            await handleBlockEvent(event, storage);
             storage.addBlockEvents([event]);
         }
 
@@ -30,7 +28,7 @@ function delay(time: number): Promise<void> {
     });
 }
 
-async function handleBlockEvent(event: PublishBlockEvent): Promise<void> {
+async function handleBlockEvent(event: PublishBlockEvent, storage: IStorage): Promise<void> {
 
     /*
         1. Verify tx
@@ -39,6 +37,10 @@ async function handleBlockEvent(event: PublishBlockEvent): Promise<void> {
      */
 
     const storageBlockItems = storage.getBlockItems();
+    const storageNullifiers = storage.getNullifiers();
+
+    const nullifiers = [...storageNullifiers];
+
     const lastBlockItemRootHash = storageBlockItems.length !== 0 ?
         storageBlockItems[storageBlockItems.length - 1].newRoot :
         "0xDE2890813A22F5DD1131E6EB966C6EA5D0A61340E03CE5B339435EEF7B08D8E";
@@ -50,11 +52,20 @@ async function handleBlockEvent(event: PublishBlockEvent): Promise<void> {
             blockItems[i - 1].newRoot :
             lastBlockItemRootHash;
 
-        const [ok, tx] = await verifyTx(item.tx, lastRootHash);
+        const okProof = await verifyTx(item.tx, lastRootHash);
 
-        console.log({ ok });
-        console.log({ tx });
+        console.log({ okProof });
+
+        const okDoubleSpend = checkDoubleSpend(item.tx, nullifiers);
+
+        console.log({ okDoubleSpend });
+
+        nullifiers.push(...item.tx.nullifier);
     }
 
 
+}
+
+function checkDoubleSpend(tx: Tx<string>, allNullifiers: string[]): boolean {
+    return !allNullifiers.find(x => x === tx.nullifier[0] || x === tx.nullifier[1])
 }

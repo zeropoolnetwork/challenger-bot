@@ -1,3 +1,6 @@
 import { scanBlocks } from "./blockScanner";
+import { MemoryStorage } from "./storage/memoryStorage";
 
-scanBlocks();
+const storage = new MemoryStorage();
+
+scanBlocks(storage);

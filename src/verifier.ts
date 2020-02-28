@@ -10,7 +10,7 @@ const vk = unstringifyVk(JSON.parse(fs.readFileSync(vkPath)));
 export async function verifyTx(
     stringTx: Tx<string>,
     lastBlockRootHash: string
-): Promise<[boolean, Tx<string> | undefined]> {
+): Promise<boolean> {
 
     const tx = bigintifyTx(stringTx);
 
@@ -32,9 +32,5 @@ export async function verifyTx(
         messageHash
     ];
 
-    const ok = await verifyProof(tx.proof.data, inputs, vk);
-    if (!ok) {
-        return [false, stringTx];
-    }
-    return [true, undefined]
+    return verifyProof(tx.proof.data, inputs, vk);
 }
