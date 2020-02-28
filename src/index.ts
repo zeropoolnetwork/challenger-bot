@@ -1,1 +1,3 @@
-console.log("Project init");
+import { scanBlocks } from "./blockScanner";
+
+scanBlocks();

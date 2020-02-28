@@ -8,8 +8,8 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npx ts-node ./src/index.ts",
     "start:prod": "NODE_ENV=production npx ts-node ./src/index.ts",
-    "start:debug": "npx ts-node-dev $NODE_DEBUG_OPTION --respawn --transpileOnly ./src/index.ts",
-    "build": "npm run prebuild && npx tsc",
+    "start:debug": "npx ts-node-dev --experimental-worker $NODE_DEBUG_OPTION --respawn --transpileOnly ./src/index.ts",
+    "build": "npm run prebuild && npx tsc --module commonjs",
     "lint": "npx tslint -c tslint.json 'src/**/*.ts'"
   },
   "repository": {
@@ -22,9 +22,16 @@
     "url": "https://github.com/zeropoolnetwork/challenger-bot/issues"
   },
   "homepage": "https://github.com/zeropoolnetwork/challenger-bot#readme",
+  "dependencies": {
+    "ethereum-protocol": "^1.0.1",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "zeropool-lib": "^0.4.11-node"
+  },
   "devDependencies": {
-    "prettier": "^1.19.1",
     "@types/node": "^13.7.1",
+    "prettier": "^1.19.1",
     "ts-node": "^8.6.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "tslint": "^6.0.0",
